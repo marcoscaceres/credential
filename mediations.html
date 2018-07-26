@@ -10,20 +10,26 @@ async function mediate(mediation){
     out.innerText = `username: ${credential.id}`;
   }
 }
-function savePasswordCredential(form){
+function savePasswordCredential(ev){
+  ev.preventDefault();
+  const {target: form} = ev;
   debugger;
   navigator.credentials.create({
     password: form
   }).then(console.log);
   return false;
 }
+window.onload = () =>{
+  const form = document.querySelector("form");
+  form.onsubmit = savePasswordCredential;
+}
 </script>
 
 <h1>Mediations - demo</h1>
-<form onsubmit="savePasswordCredential(this);">
+<form method="POST">
   <label><span>Username:</span> <input name="username" type="username" autocomplete="username"></label>
   <label><span>Password:</span> <input name="password" type="password" autocomplete="new-password"></label>
-  <label><span>Avatar:</span> <input name="avatar" type="url" autocomplete="photo" value="https://avatars2.githubusercontent.com/u/870154?s=400&u=9e9dd46311909328f0973368d2ddd981ec22dc2d&v=4"></label>
+  <label><span>Avatar:</span> <input name="avatar" type="url" autocomplete="photo" value="https://marcoscaceres.github.io/credential/marcos.jpeg"></label>
   <label><button class="pinkButton">Save credential</button></label>
 </form>
 
