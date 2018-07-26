@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Credential management</title>
+</head>
+<body>
+  <!-- <h2>Autocomplete - new user</h2>
+  <form>
+    <fieldset>
+      <div>
+        <label>Email: <input type="email" autocomplete="username"></label>
+      </div>
+      <div>
+        <label>Name: <input autocomplete="name"></label>
+      </div>
+      <div>
+        <label>Password: <input autocomplete="new-password"></label>
+      </div>
+    </fieldset>
+  </form> -->
+  <h2>Autocomplete - old user</h2>
+  <form id="login">
+    <fieldset>
+      <div>
+        <label>Username: <input type="text" autocomplete="username"></label>
+      </div>
+      <div>
+        <label>Password: <input type="password" autocomplete="current-password"></label>
+      </div>
+      <div>
+        <input type="submit">
+      </div>
+    </fieldset>
+  </form>
+</body>
+<script>
+  const form = document.getElementById("login");
+  form.addEventListener("submit", async ev => {
+    debugger
+    // if(!!window.PasswordCredential) return;
+    ev.preventDefault();
+    // console.log(ev);
+    // return false
+    const cose_alg_ECDSA_w_SHA256 = -7;
+    /* The challenge must be produced by the server */
+    let challenge = new Uint8Array([21,31,105,21,31,105,21,31,105,21,31,105,21,31,105,21,31,105,21,31,105,21,31,105,21,31,105,21,31,105,31,105]);
+    let pubKeyCredParams = [{
+      type: "public-key",
+      alg: cose_alg_ECDSA_w_SHA256
+    }];
+    let rp = {
+      name: "Test Website"
+    };
+    let user = {
+      name: "Firefox User <firefox@example.com>",
+      displayName: "Firefox User",
+      id: new TextEncoder("utf-8").encode("firefox@example.com")
+    };
+
+    let publicKey = {challenge, pubKeyCredParams, rp, user};
+    const c = await navigator.credentials.create({publicKey});
+    console.log(c);
+
+  });
+</script>
+</html>
