@@ -1,28 +1,30 @@
 <script>
-async function mediate(mediation){
-  debugger
+async function mediate(mediation) {
   const credential = await navigator.credentials.get({
     password: true,
     mediation,
   });
   const out = document.getElementById("out");
-  if(credential){
-    out.innerText = `username: ${credential.id}`;
+  if (credential) {
+    out.innerText = `${credential.id}`;
+  } else {
+    out.innerText = `username: null`
   }
 }
-function savePasswordCredential(ev){
+
+async function savePasswordCredential(ev) {
   ev.preventDefault();
-  const {target: form} = ev;
-  debugger;
-  navigator.credentials.create({
-    password: form
-  }).then(console.log);
-  return false;
+  const { target: form } = ev;
+  const credential = await navigator.credentials.create({
+    password: form,
+  });
+  await navigator.credentials.store(credential);
 }
-window.onload = () =>{
+
+window.onload = () => {
   const form = document.querySelector("form");
   form.onsubmit = savePasswordCredential;
-}
+};
 </script>
 
 <h1>Mediations - demo</h1>
@@ -32,19 +34,32 @@ window.onload = () =>{
   <label><span>Avatar:</span> <input name="photo" type="url" autocomplete="photo" value="https://marcoscaceres.github.io/credential/marcos.png"></label>
   <label><button class="pinkButton">Save credential</button></label>
 </form>
-
-<div>
+<hr>
+<div style="text-align: center">
+  <h2>Mediation</h2>
   <button onclick="mediate(this.textContent)" class="myButton">silent</button>
   <button onclick="mediate(this.textContent)" class="myButton">optional</button>
   <button onclick="mediate(this.textContent)" class="myButton">required</button>
 </div>
 
-<h2>Retrieved credentials: <output id="out">none</output>.</h2>
+<hr>
+<h2>Retrieved credentials: <output id="out">none</output></h2>
 
 <style>
-label {
-  display: block;
+body {
+    width: 50%;
+    margin: auto;
 }
+label, input[autocomplete] {
+  font-family:Arial;
+  display: block;
+  width: auto;
+  font-size: 1.3em;
+}
+ input[autocomplete] {
+   width: 100%;
+   margin-bottom: 1em;
+ }
 .myButton {
 	-moz-box-shadow:inset 0px 1px 0px 0px #97c4fe;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #97c4fe;
